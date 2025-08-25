@@ -58,5 +58,3 @@ OBSERVAÇÕES
 - Para gerar o PDF do relatório final, capture os prints das tabelas e gráficos exibidos pelo script.
 - Suba o PDF e o link do repositório para a entrega.
 
-LINK DO REPOSITÓRIO
-[INSIRA AQUI O LINK PÚBLICO DO SEU REPOSITÓRIO NO GITHUB]
