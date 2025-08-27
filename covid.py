@@ -16,7 +16,7 @@ engine = create_engine(f'mysql+mysqlconnector://{usuario}:{senha}@{host}/{banco}
 # ----------------------------
 # LEITURA DO CSV
 # ----------------------------
-caminho_csv = r"C:\Users\marii\Desktop\Análise de Dados e Big Data\caso_full.csv.gz"
+caminho_csv = r"C:\Users\Marianna\Desktop\Analise de Dados e Big Data\analise-covid-brasil\caso_full.csv.gz"
 
 colunas = [
     'city', 
@@ -67,8 +67,8 @@ print("🎉 Todos os dados foram inseridos no MySQL com sucesso!")
 # ----------------------------
 df_mysql = pd.read_sql('SELECT * FROM covid_city', con=engine)
 
-# 1️⃣ Todos os casos de morte por cidade
-mortes_por_cidade = df_mysql.groupby('city')['last_available_deaths'].sum().sort_values(ascending=False)
+# 1️⃣ Todos os casos de morte por cidade (cumulativo)
+mortes_por_cidade = df_mysql.groupby('city')['last_available_deaths'].max().sort_values(ascending=False)
 print("\n💀 Casos de morte por cidade (Top 10):")
 print(mortes_por_cidade.head(10))
 
@@ -80,8 +80,8 @@ plt.xlabel("Número de mortes")
 plt.ylabel("Cidade")
 plt.show()
 
-# 2️⃣ População estimada antes e depois dos casos para todas as cidades
-populacao = df_mysql.groupby('city')[['estimated_population_2019', 'last_available_confirmed']].sum()
+# 2️⃣ População estimada antes e depois dos casos (cumulativo)
+populacao = df_mysql.groupby('city')[['estimated_population_2019', 'last_available_confirmed']].max()
 populacao['pop_apos_casos'] = populacao['estimated_population_2019'] - populacao['last_available_confirmed']
 print("\n👥 População estimada antes e depois dos casos (Top 10 cidades):")
 print(populacao.head(10))
@@ -98,14 +98,14 @@ plt.legend()
 plt.show()
 
 # 3️⃣ Cidade com maior quantidade de casos
-maior_cidade = df_mysql.groupby('city')['last_available_confirmed'].sum().idxmax()
-quant_maior = df_mysql.groupby('city')['last_available_confirmed'].sum().max()
+maior_cidade = df_mysql.groupby('city')['last_available_confirmed'].max().idxmax()
+quant_maior = df_mysql.groupby('city')['last_available_confirmed'].max().max()
 print(f"\n🏙️ Cidade com maior quantidade de casos: {maior_cidade} ({quant_maior} casos)")
 
 # 4️⃣ Cidade com menor quantidade de casos (com pelo menos 1 caso)
 df_com_casos = df_mysql[df_mysql['last_available_confirmed'] > 0]
-menor_cidade = df_com_casos.groupby('city')['last_available_confirmed'].sum().idxmin()
-quant_menor = df_com_casos.groupby('city')['last_available_confirmed'].sum().min()
+menor_cidade = df_com_casos.groupby('city')['last_available_confirmed'].max().idxmin()
+quant_menor = df_com_casos.groupby('city')['last_available_confirmed'].max().min()
 print(f"🏘️ Cidade com menor quantidade de casos: {menor_cidade} ({quant_menor} casos)")
 
 # Gráfico maior e menor cidade em casos
