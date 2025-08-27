@@ -38,4 +38,63 @@ Antes de rodar o projeto, instale as seguintes ferramentas e bibliotecas:
 
 ```bash
 pip install pandas sqlalchemy mysql-connector-python matplotlib seaborn
+```
 
+---
+
+## ▶️ Como Rodar
+
+1. Certifique-se de que o MySQL está rodando.  
+2. Crie o banco de dados:  
+
+```sql
+CREATE DATABASE covid_db;
+```
+
+3. Crie a tabela:  
+
+```sql
+CREATE TABLE covid_city (
+    city VARCHAR(255),
+    city_ibge_code INT,
+    date DATE,
+    estimated_population_2019 INT,
+    last_available_confirmed INT,
+    last_available_deaths INT
+);
+```
+
+4. Ajuste a configuração do MySQL no script `covid.py`:  
+
+```python
+usuario = 'root'
+senha = 'root'
+host = 'localhost'
+banco = 'covid_db'
+```
+
+5. Execute o script Python:  
+
+```bash
+python covid.py
+```
+
+O script irá:  
+- Limpar a tabela `covid_city` caso já exista.  
+- Inserir os dados do CSV no MySQL em blocos.  
+- Gerar os relatórios e gráficos.  
+
+---
+
+## 📊 Resultados Esperados
+
+- Gráfico **Top 10 cidades por mortes COVID**.  
+- Gráfico **População estimada antes e depois dos casos (Top 10 cidades)**.  
+- Gráfico da **Cidade com maior e menor quantidade de casos**.  
+- Relatórios impressos no console.  
+
+---
+
+## 📝 Observações
+
+- Para gerar o PDF do relatório final, capture os prints das tabelas e gráficos exibidos pelo script.  
